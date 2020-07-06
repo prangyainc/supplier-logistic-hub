@@ -1,0 +1,45 @@
+{
+	"ColumnCollection": [{
+		"columnKey": "ProductId",
+		"visible": true
+	}, {
+		"columnKey": "Name",
+		"visible": true
+	}, {
+		"columnKey": "SupplierName",
+		"visible": true
+	}, {
+		"columnKey": "Category",
+		"visible": true
+	}, {
+		"columnKey": "Quantity",
+		"visible": true
+	}, {
+		"columnKey": "Price",
+		"visible": true
+	}, {
+		"columnKey": "MainCategory",
+		"visible": false
+	}, {
+		"columnKey": "TaxTarifCode",
+		"visible": false
+	}, {
+		"columnKey": "WeightMeasure",
+		"visible": false
+	}, {
+		"columnKey": "Description",
+		"visible": true
+	}, {
+		"columnKey": "DateOfSale",
+		"visible": false
+	}, {
+		"columnKey": "Status",
+		"visible": false
+	}, {
+		"columnKey": "UoM",
+		"visible": false
+	}, {
+		"columnKey": "Action",
+		"visible": true
+	}]
+}

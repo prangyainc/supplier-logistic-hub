@@ -1,0 +1,110 @@
+<mvc:View controllerName="inc.lch.FUS.FreightUnits_Supplier.controller.Home" xmlns:mvc="sap.ui.core.mvc" displayBlock="true" xmlns="sap.m"
+	xmlns:tnt="sap.tnt" xmlns:l="sap.ui.layout" xmlns:table="sap.ui.table">
+	<tnt:ToolPage id="FU_supplier">
+		<tnt:header>
+			<tnt:ToolHeader>
+				<Button id="sideNavigationToggleButton" icon="sap-icon://menu2" type="Transparent" press=".onSideNavButtonPress">
+					<layoutData>
+						<OverflowToolbarLayoutData priority="NeverOverflow"/>
+					</layoutData>
+				</Button>
+				<Image src="" id="logo"></Image>
+				<ToolbarSpacer/>
+				<Text text="supplier id"/>
+			</tnt:ToolHeader>
+		</tnt:header>
+		<tnt:sideContent>
+			<tnt:SideNavigation expanded="true" selectedKey="{oNavigationModel>/selectedKey}" itemSelect=".onItemSelect">
+				<tnt:NavigationList items="{oNavigationModel>/fixedNavigation}">
+					<tnt:NavigationListItem text="{oNavigationModel>title}" icon="{oNavigationModel>icon}" enabled="true" key="{oNavigationModel>key}"></tnt:NavigationListItem>
+				</tnt:NavigationList>
+			</tnt:SideNavigation>
+		</tnt:sideContent>
+		<tnt:mainContents>
+			<NavContainer id="pageContainer" initialPage="Dashboard">
+				<pages>
+					<Page id="Dashboard" title="Dashboard" titleLevel="H1">
+						<subHeader>
+							<Toolbar>
+								<l:VerticalLayout width="100%" class="gridWrapper">
+									<l:Grid position="Center">
+										<Text text="50 Requests"/>
+										<Text text="15 Drafts"/>
+										<Text text="20 Quotations"/>
+									</l:Grid>
+								</l:VerticalLayout>
+							</Toolbar>
+						</subHeader>
+						<l:Grid position="Center" width="80%">
+							<GenericTile class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout" header="24Hrs">
+								<tileContent footer="requests"></tileContent>
+							</GenericTile>
+							<GenericTile class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout" header="48Hrs">
+								<tileContent footer="requests"></tileContent>
+							</GenericTile>
+							<GenericTile class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout" header="72Hrs">
+								<tileContent footer="requests"></tileContent>
+							</GenericTile>
+							<GenericTile class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout" header="1week">
+								<tileContent footer="requests"></tileContent>
+							</GenericTile>
+						</l:Grid>
+						<Table id="idProductsTable" columns="{path: 'ColModel>/ColumnCollection'}"
+							items="{path: 'oTableModel>/ProductCollection', factory: '.populateItems'}">
+							<headerToolbar>
+								<OverflowToolbar>
+									<Title text="Products" level="H2"/>
+									<ToolbarSpacer/>
+									<Button text="Filters"/>
+									
+								</OverflowToolbar>
+							</headerToolbar>
+							<!--<Toolbar>
+								<Label text="Sort by:"/>
+								<Button text="Product id" press="sorter"/>
+								<Button text="DateOfSale" press="sorter"/>
+								<ToolbarSpacer/>
+								<Button text="Confirm" press="ConfirmOrder"/>
+								<Button text="Group and Confirm" press="Group"/>
+								<Button text="Save as Draft" press="Draft"/>
+							</Toolbar>-->
+							<columns>
+								<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" visible="{ColModel>visible}">
+									<Text text="{ColModel>columnKey}"/>
+								</Column>
+							</columns>
+						</Table>
+					</Page>
+					<Page id="Requests" title="Requests" titleLevel="H1">
+						<Table id="idRequestsTable" columns="{path: 'ColModel>/ColumnCollection'}"
+							items="{path: 'oTableModel>/ProductCollection', factory: '.populateItems'}" mode="MultiSelect" selectionChange="fnselecteditems">
+							<headerToolbar>
+								<OverflowToolbar>
+									<Title text="Products" level="H2"/>
+									<ToolbarSpacer/>
+									<Button text="Filters"/>
+									<Button text="Preference" press="ChangeOrder"/>
+									<Button text="Save as Draft" press="fnSaveDraft"/>
+								</OverflowToolbar>
+							</headerToolbar>
+							<!--<Toolbar>
+								<Label text="Sort by:"/>
+								<Button text="Product id" press="sorter"/>
+								<Button text="DateOfSale" press="sorter"/>
+								<ToolbarSpacer/>
+								<Button text="Confirm" press="ConfirmOrder"/>
+								<Button text="Group and Confirm" press="Group"/>
+								<Button text="Save as Draft" press="Draft"/>
+							</Toolbar>-->
+							<columns>
+								<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" visible="{ColModel>visible}">
+									<Text text="{ColModel>columnKey}"/>
+								</Column>
+							</columns>
+						</Table>
+					</Page>
+				</pages>
+			</NavContainer>
+		</tnt:mainContents>
+	</tnt:ToolPage>
+</mvc:View>

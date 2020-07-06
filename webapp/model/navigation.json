@@ -1,0 +1,26 @@
+{
+		"selectedKey": "Dashboard",
+		"fixedNavigation": [
+		{
+			"title": "Dashboard",
+			"key":"Dashboard",
+			"icon": "sap-icon://bbyd-dashboard"
+		},
+		{
+			"title": "Requests",
+			"key":"Requests",
+			"icon": "sap-icon://request"
+		},
+		{
+			"title": "Drafts",
+			"key":"Drafts",
+			"icon": "sap-icon://notes"
+		},
+		{
+			"title": "My Responses",
+			"key":"Responses",
+			"icon": "sap-icon://sales-quote"
+		}
+		
+	]
+}
