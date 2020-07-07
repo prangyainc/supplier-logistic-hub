@@ -1,8 +1,11 @@
 sap.ui.define([
 	"sap/ui/core/mvc/Controller",
 	"sap/ui/model/json/JSONModel",
-	"../utility/formatter"
-], function (Controller, JSONModel, formatter) {
+	"sap/m/MessageBox",
+	"sap/m/MessageToast",
+	"../utility/formatter",
+	"sap/ui/core/Fragment"
+], function (Controller, JSONModel, formatter, Fragment) {
 	"use strict";
 
 	return Controller.extend("inc.lch.FUS.FreightUnits_Supplier.controller.Home", {
@@ -22,8 +25,7 @@ sap.ui.define([
 			var aColumnCollection = colModel.getProperty("/ColumnCollection");
 			this.getOwnerComponent().getModel("oDataModel").setProperty("/ColumnCollection", aColumnCollection);
 			this.getOwnerComponent().getModel("oDataModel").setProperty("/ProductCollection", oModel3);
-			//this.columnListItem();
-			var oThisController = this;
+			
 
 		},
 		onItemSelect: function (oEvent) {
@@ -105,6 +107,36 @@ sap.ui.define([
 			});
 
 			return row;
+		},
+		onPressGroupAndConfirm: function (oEvent) {
+			var oTable = this.getView().byId("idRequestsTable");
+			var idx = oTable.indexOfItem(oTable.getSelectedItem());
+			if (idx !== -1) {
+				var oItems = oTable.getSelectedItems();
+				var oSelectedItems = [];
+				for (var i = 0; i < oItems.length; i++) {
+					oSelectedItems.push(oItems[i].getBindingContext("oTableModel").getObject());
+				}
+				if (oSelectedItems.length >= 2) {
+
+					var oGroupModel = new sap.ui.model.json.JSONModel();
+					this.getView().setModel(oGroupModel, "oGroupModel");
+					oGroupModel.setProperty("/oSelectedItems", $.extend(true, [], oSelectedItems));
+					var aColumnList = this.getView().getModel("ColModel").getProperty("/ColumnCollection");
+					this.getView().getModel("oGroupModel").setProperty("/ColumnCollection", aColumnList);
+					if (!this._oDialog) {
+						//this._oDialog = sap.ui.xmlfragment("com.demo.odata.Demo_Odata_Service.fragment.addItem", this);
+						this._oDialog = sap.ui.xmlfragment("idGroupandConfirm", "inc.lch.FUS.FreightUnits_Supplier.fragments.groupandconfirm", this);
+					}
+					this.getView().addDependent(this._oDialog);
+					this._oDialog.open();
+				} else {
+					sap.m.MessageBox.alert("Please Select atleast 2 Items");
+				}
+			} else {
+				sap.m.MessageBox.alert("Please Select the Items");
+			}
+
 		},
 		onPressEdit: function (path) {
 			this.bFlag = false;
@@ -331,8 +363,8 @@ sap.ui.define([
 			var items = contexts.map(function (c) {
 				return c.getObject();
 			});
-			for(var i=0;i<contexts.length;i++){
-				
+			for (var i = 0; i < contexts.length; i++) {
+
 			}
 		},
 		fnselecteditems: function () {
