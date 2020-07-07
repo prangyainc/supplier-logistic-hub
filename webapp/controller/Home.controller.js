@@ -5,7 +5,7 @@ sap.ui.define([
 	"sap/m/MessageToast",
 	"../utility/formatter",
 	"sap/ui/core/Fragment"
-], function (Controller, JSONModel, formatter, Fragment) {
+], function (Controller, JSONModel, formatter, Fragment,MessageBox, MessageToast) {
 	"use strict";
 
 	return Controller.extend("inc.lch.FUS.FreightUnits_Supplier.controller.Home", {
