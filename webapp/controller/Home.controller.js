@@ -4,8 +4,10 @@ sap.ui.define([
 	"sap/m/MessageBox",
 	"sap/m/MessageToast",
 	"../utility/formatter",
-	"sap/ui/core/Fragment"
-], function (Controller, JSONModel, formatter, Fragment,MessageBox, MessageToast) {
+	"sap/ui/core/Fragment",
+	"sap/ui/core/util/Export",
+	"sap/ui/core/util/ExportTypeCSV"
+], function (Controller, JSONModel, formatter, Fragment,MessageBox, MessageToast,Export, ExportTypeCSV ) {
 	"use strict";
 
 	return Controller.extend("inc.lch.FUS.FreightUnits_Supplier.controller.Home", {
@@ -357,6 +359,67 @@ sap.ui.define([
 				//this.byId("idRequestsTable").addItem(newRow);
 			}
 
+		},
+		onDownload: sap.m.Table.prototype.exportData || function () {
+
+			//var oModel1 = sap.ui.getCore().getModel("oTableModel");
+			var oModel = this.getView().getModel("oTableModel");
+			var oExport = new Export({
+
+				exportType: new ExportTypeCSV({
+					fileExtension: "xls",
+					mimeType: "application/vnd.ms-excel",
+					separatorChar: "\t"
+				}),
+
+				models: oModel,
+
+				rows: {
+					path: "/ProductCollection"
+				},
+				columns: [{
+					name: "ProductId",
+					template: {
+						content: "{ProductId}"
+					}
+				}, {
+					name: "Name",
+					template: {
+						content: "{Name}"
+					}
+				}, {
+					name: "SupplierName",
+					template: {
+						content: "{SupplierName}"
+					}
+				}, {
+					name: "Category",
+					template: {
+						content: "{Category}"
+					}
+				}, {
+					name: "Quantity",
+					template: {
+						content: "{Quantity}"
+					}
+				}, {
+					name: "Price",
+					template: {
+						content: "{Price}"
+					}
+				}, {
+					name: "Description",
+					template: {
+						content: "{Description}"
+					}
+				}]
+			});
+			console.log(oExport);
+			oExport.saveFile().catch(function (oError) {
+
+			}).then(function () {
+				oExport.destroy();
+			});
 		},
 		fnSaveDraft: function (oEvent) {
 			var contexts = oEvent.getSource().getParent().getParent().getSelectedContexts();

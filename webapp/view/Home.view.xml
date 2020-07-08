@@ -86,6 +86,7 @@
 									<Button text="Filters"/>
 									<Button text="Preference" press="ChangeOrder"/>
 									<Button text="Save as Draft" press="fnSaveDraft"/>
+									<Button text="download file" press="onDownload"/>
 								</OverflowToolbar>
 							</headerToolbar>
 							<!--<Toolbar>
