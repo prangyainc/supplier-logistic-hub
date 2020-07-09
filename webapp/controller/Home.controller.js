@@ -24,6 +24,7 @@ sap.ui.define([
 			this.getOwnerComponent().getModel("oDataModel").setProperty("/ProductCollection", oModel3);
 			//this.columnListItem();
 			var oThisController = this;
+			this.aDrafts=[];
 
 		},
 		onItemSelect: function (oEvent) {
@@ -327,13 +328,23 @@ sap.ui.define([
 
 		},
 		fnSaveDraft: function (oEvent) {
-			var contexts = oEvent.getSource().getParent().getParent().getSelectedContexts();
-			var items = contexts.map(function (c) {
+			var aSelectedpaths = oEvent.getSource().getParent().getParent().getSelectedContextPaths();
+			/*var items = contexts.map(function (c) {
 				return c.getObject();
-			});
-			for(var i=0;i<contexts.length;i++){
+			});*/
+
+			for (var i = aSelectedpaths.length - 1; i >= 0; i--) { //start with highest index first 
 				
+				var aPathParts = aSelectedpaths[i].split("/");
+				var iIndex = aPathParts[aPathParts.length - 1]; //Index to delete into our array of objects
+
+				var oJSONData = this.getView().getModel("oTableModel").getProperty("/ProductCollection");
+				this.aDrafts.push(this.getView().getModel("oTableModel").getProperty("/ProductCollection/"+iIndex));
+				oJSONData.splice(iIndex, 1); //Use splice to remove your object in the array
+				this.getView().getModel("oTableModel").setProperty("/ProductCollection",oJSONData); //And set the new data to the model
+
 			}
+			this.getView().getModel("oTableModel").setProperty("/DraftsCollection",this.aDrafts);
 		},
 		fnselecteditems: function () {
 
