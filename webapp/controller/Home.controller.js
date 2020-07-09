@@ -1,8 +1,13 @@
 sap.ui.define([
 	"sap/ui/core/mvc/Controller",
 	"sap/ui/model/json/JSONModel",
-	"../utility/formatter"
-], function (Controller, JSONModel, formatter) {
+	"sap/m/MessageBox",
+	"sap/m/MessageToast",
+	"../utility/formatter",
+	"sap/ui/core/Fragment",
+	"sap/ui/core/util/Export",
+	"sap/ui/core/util/ExportTypeCSV"
+], function (Controller, JSONModel, formatter, Fragment,MessageBox, MessageToast,Export, ExportTypeCSV ) {
 	"use strict";
 
 	return Controller.extend("inc.lch.FUS.FreightUnits_Supplier.controller.Home", {
@@ -106,6 +111,36 @@ sap.ui.define([
 			});
 
 			return row;
+		},
+		onPressGroupAndConfirm: function (oEvent) {
+			var oTable = this.getView().byId("idRequestsTable");
+			var idx = oTable.indexOfItem(oTable.getSelectedItem());
+			if (idx !== -1) {
+				var oItems = oTable.getSelectedItems();
+				var oSelectedItems = [];
+				for (var i = 0; i < oItems.length; i++) {
+					oSelectedItems.push(oItems[i].getBindingContext("oTableModel").getObject());
+				}
+				if (oSelectedItems.length >= 2) {
+
+					var oGroupModel = new sap.ui.model.json.JSONModel();
+					this.getView().setModel(oGroupModel, "oGroupModel");
+					oGroupModel.setProperty("/oSelectedItems", $.extend(true, [], oSelectedItems));
+					var aColumnList = this.getView().getModel("ColModel").getProperty("/ColumnCollection");
+					this.getView().getModel("oGroupModel").setProperty("/ColumnCollection", aColumnList);
+					if (!this._oDialog) {
+						//this._oDialog = sap.ui.xmlfragment("com.demo.odata.Demo_Odata_Service.fragment.addItem", this);
+						this._oDialog = sap.ui.xmlfragment("idGroupandConfirm", "inc.lch.FUS.FreightUnits_Supplier.fragments.groupandconfirm", this);
+					}
+					this.getView().addDependent(this._oDialog);
+					this._oDialog.open();
+				} else {
+					sap.m.MessageBox.alert("Please Select atleast 2 Items");
+				}
+			} else {
+				sap.m.MessageBox.alert("Please Select the Items");
+			}
+
 		},
 		onPressEdit: function (path) {
 			this.bFlag = false;
@@ -326,6 +361,67 @@ sap.ui.define([
 				//this.byId("idRequestsTable").addItem(newRow);
 			}
 
+		},
+		onDownload: sap.m.Table.prototype.exportData || function () {
+
+			//var oModel1 = sap.ui.getCore().getModel("oTableModel");
+			var oModel = this.getView().getModel("oTableModel");
+			var oExport = new Export({
+
+				exportType: new ExportTypeCSV({
+					fileExtension: "xls",
+					mimeType: "application/vnd.ms-excel",
+					separatorChar: "\t"
+				}),
+
+				models: oModel,
+
+				rows: {
+					path: "/ProductCollection"
+				},
+				columns: [{
+					name: "ProductId",
+					template: {
+						content: "{ProductId}"
+					}
+				}, {
+					name: "Name",
+					template: {
+						content: "{Name}"
+					}
+				}, {
+					name: "SupplierName",
+					template: {
+						content: "{SupplierName}"
+					}
+				}, {
+					name: "Category",
+					template: {
+						content: "{Category}"
+					}
+				}, {
+					name: "Quantity",
+					template: {
+						content: "{Quantity}"
+					}
+				}, {
+					name: "Price",
+					template: {
+						content: "{Price}"
+					}
+				}, {
+					name: "Description",
+					template: {
+						content: "{Description}"
+					}
+				}]
+			});
+			console.log(oExport);
+			oExport.saveFile().catch(function (oError) {
+
+			}).then(function () {
+				oExport.destroy();
+			});
 		},
 		fnSaveDraft: function (oEvent) {
 			var aSelectedpaths = oEvent.getSource().getParent().getParent().getSelectedContextPaths();

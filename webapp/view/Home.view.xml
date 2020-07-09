@@ -82,9 +82,11 @@
 								<OverflowToolbar>
 									<Title text="Products" level="H2"/>
 									<ToolbarSpacer/>
+									<Button press="onPressGroupAndConfirm" text="group and confirm"></Button>
 									<Button text="Filters"/>
 									<Button text="Preference" press="ChangeOrder"/>
 									<Button text="Save as Draft" press="fnSaveDraft"/>
+									<Button text="download file" press="onDownload"/>
 								</OverflowToolbar>
 							</headerToolbar>
 							<!--<Toolbar>
