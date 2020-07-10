@@ -441,6 +441,7 @@ sap.ui.define([
 
 			}
 			this.getView().getModel("oTableModel").setProperty("/DraftsCollection",this.aDrafts);
+			oEvent.getSource().getParent().getParent().removeSelections(true);
 		},
 		fnselecteditems: function () {
 

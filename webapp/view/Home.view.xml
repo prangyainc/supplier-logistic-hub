@@ -114,7 +114,7 @@
 									<ToolbarSpacer/>
 									<Button text="Filters"/>
 									<Button text="Preference" press="ChangeOrder"/>
-									<Button text="Save as Draft" press="fnSaveDraft"/>
+									<Button text="Delete" press="fnDraftDelete"/>
 								</OverflowToolbar>
 							</headerToolbar>
 							<!--<Toolbar>
