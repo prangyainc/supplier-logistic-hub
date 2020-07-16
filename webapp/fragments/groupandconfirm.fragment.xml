@@ -7,8 +7,8 @@
 			<ToolbarSpacer/>
 			<Button text="Add New" press="onPressAddNew" type="Emphasized" icon="sap-icon://add-product"/>
 		</Toolbar>
-		<Table id="idProductsTable" columns="{path: 'oGroupModel>/ColumnCollection'}"
-			items="{path: 'oGroupModel>/oSelectedItems', factory: '.populateItems'}">
+		<Table id="idGroupTable" columns="{path: 'ColModel>/ColumnCollection'}"
+			items="{path: 'oTableModel>/oSelectedItems', factory: '.populateItems'}">
 			<headerToolbar>
 				<OverflowToolbar>
 					<Title text="Products" level="H2"/>
@@ -18,8 +18,8 @@
 				</OverflowToolbar>
 			</headerToolbar>
 			<columns>
-				<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" visible="{oGroupModel>visible}">
-					<Text text="{oGroupModel>columnKey}"/>
+				<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" visible="{oTableModel>visible}">
+					<Text text="{ColModel>columnKey}"/>
 				</Column>
 			</columns>
 			

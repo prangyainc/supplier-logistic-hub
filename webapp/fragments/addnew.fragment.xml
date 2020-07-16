@@ -1,0 +1,38 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:l="sap.ui.layout" xmlns:f="sap.ui.layout.form"
+	xmlns:mvc="sap.ui.core.mvc">
+	<Dialog title="Add New" titleAlignment="Center" closeOnNavigation="true" draggable="true" contentWidth="30rem" resizable="true"
+		class="sapUiSizeCompact" verticalScrolling="true">
+		<f:SimpleForm id="idSimpleFormAdd" editable="true" layout="ColumnLayout">
+			<f:content>
+				<Label text="Product ID"/>
+				<Input id="idProdId" value="{oDataGlobalModel>/oSelectedItems/ID}"/>
+				<Label text="Name"/>
+				<Input id="idName" value="{oTableModel>/oSelectedItems/Name}"></Input>
+				<Label text="Ship Date and Time"/>
+				<Input value="{oDataGlobalModel>/selectedRow/Price}"></Input>
+				<Label text="Quantity"/>
+				<Input value="{oDataGlobalModel>/selectedRow/Rating}"></Input>
+				<Label text="Destination ID"></Label>
+				<Input id="quality" value="{}"/>
+				<Label text="Origin ID"></Label>
+				<Input value="{ }"/>
+				<Label text="Country of Origin"></Label>
+				<Input value="{ }"/>
+				<Label text="New Quantity"></Label>
+				<Input value="{ }"/>
+				<Label text="New Ship Date And Time"></Label>
+				<Input value="{ }"/>
+				<Label text="Rem Days"></Label>
+				<Input value="{= ${oDataGlobalModel>Day} - ${oDataGlobalModel>NewDay}}"/>
+				<Label text="Rem Quantity"></Label>
+				<Input value="{= ${oDataGlobalModel>Quantity} - ${oDataGlobalModel>NewQuantity}}"/>
+			</f:content>
+		</f:SimpleForm>
+		<beginButton>
+			<Button text="save" press="onSaveAdd" type="Accept"/>
+		</beginButton>
+		<endButton>
+			<Button text="cancel" type="Reject" press="onCancel"/>
+		</endButton>
+	</Dialog>
+</core:FragmentDefinition>

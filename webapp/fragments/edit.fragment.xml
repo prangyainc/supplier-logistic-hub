@@ -5,7 +5,7 @@
 		<f:SimpleForm id="idSimpleFormEdit" editable="true" layout="ColumnLayout">
 			<f:content>
 				<Label text="Product ID"/>
-				<Input id="idProdId" value="{oViewModel>/edit/ID}" editable="false"/>
+				<Input id="idProdId" value="{oViewModel>/edit/ProductId}" editable="false"/>
 				<Label text="Manufacturer ID"/>
 				<Input id="idManufacturer" value="{oViewModel>/edit/Name}"></Input>
 				<Label text="Ship Date and Time"/>
