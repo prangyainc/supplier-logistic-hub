@@ -1,5 +1,5 @@
 <mvc:View controllerName="inc.lch.FUS.FreightUnits_Supplier.controller.Home" xmlns:mvc="sap.ui.core.mvc" displayBlock="true" xmlns="sap.m"
-	xmlns:tnt="sap.tnt" xmlns:l="sap.ui.layout" xmlns:table="sap.ui.table">
+	xmlns:tnt="sap.tnt" xmlns:l="sap.ui.layout" xmlns:table="sap.ui.table" xmlns:html="http://www.w3.org/1999/xhtml">
 	<tnt:ToolPage id="FU_supplier">
 		<tnt:header>
 			<tnt:ToolHeader>
@@ -56,7 +56,6 @@
 									<Title text="Products" level="H2"/>
 									<ToolbarSpacer/>
 									<Button text="Filters"/>
-									
 								</OverflowToolbar>
 							</headerToolbar>
 							<!--<Toolbar>
@@ -82,11 +81,14 @@
 								<OverflowToolbar>
 									<Title text="Products" level="H2"/>
 									<ToolbarSpacer/>
+									<Button text="confirm Order" press="onConfirmOrder"/>
 									<Button press="onPressGroupAndConfirm" text="group and confirm"></Button>
 									<Button text="Filters"/>
 									<Button text="Preference" press="ChangeOrder"/>
 									<Button text="Save as Draft" press="fnSaveDraft"/>
 									<Button text="download file" press="onDownload"/>
+									<Button text="upload file" press="onUploadFile"/>
+									
 								</OverflowToolbar>
 							</headerToolbar>
 							<!--<Toolbar>
@@ -105,7 +107,7 @@
 							</columns>
 						</Table>
 					</Page>
-						<Page id="Drafts" title="Draft" titleLevel="H1">
+					<Page id="Drafts" title="Draft" titleLevel="H1">
 						<Table id="idDraftsTable" columns="{path: 'ColModel>/ColumnCollection'}"
 							items="{path: 'oTableModel>/DraftsCollection', factory: '.populateItems'}" mode="MultiSelect" selectionChange="fnselecteditems">
 							<headerToolbar>
@@ -128,6 +130,32 @@
 							</Toolbar>-->
 							<columns>
 								<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" visible="{ColModel>visible}">
+									<Text text="{ColModel>columnKey}"/>
+								</Column>
+							</columns>
+						</Table>
+					</Page>
+					<Page id="Responses" title="Responses" titleLevel="H1">
+						<Table id="idResponseTable" columns="{path: 'ColModel>/ColumnCollection'}"
+							items="{path: 'oTableModel>/ResponseCollection', factory: '.populateItems'}" selectionChange="fnselecteditem">
+							<headerToolbar>
+								<OverflowToolbar>
+									<Title text="Products" level="H2"/>
+									<ToolbarSpacer/>
+									<Button text="Filters"/>
+								</OverflowToolbar>
+							</headerToolbar>
+							<!--<Toolbar>
+								<Label text="Sort by:"/>
+								<Button text="Product id" press="sorter"/>
+								<Button text="DateOfSale" press="sorter"/>
+								<ToolbarSpacer/>
+								<Button text="Confirm" press="ConfirmOrder"/>
+								<Button text="Group and Confirm" press="Group"/>
+								<Button text="Save as Draft" press="Draft"/>
+							</Toolbar>-->
+							<columns>
+								<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" visible="{ColModel>visible}" mergeDuplicates="true">
 									<Text text="{ColModel>columnKey}"/>
 								</Column>
 							</columns>

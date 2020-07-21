@@ -23,14 +23,15 @@ sap.ui.define([
 			this.getView().setModel(oModel2, "oNavigationModel");
 			var oModel3 = new JSONModel("model/products.json");
 			this.getView().setModel(oModel3, "oTableModel");
-
+			var oViewModel = new sap.ui.model.json.JSONModel("model/editablecollection.json");
+			this.getView().setModel(oViewModel, "oViewModel");
 			var aColumnCollection = colModel.getProperty("/ColumnCollection");
 			this.getOwnerComponent().getModel("oDataModel").setProperty("/ColumnCollection", aColumnCollection);
 			this.getOwnerComponent().getModel("oDataModel").setProperty("/ProductCollection", oModel3);
 			//this.columnListItem();
 			var oThisController = this;
 			this.aDrafts = [];
-			
+			this.aResponse = [];
 
 		},
 		onItemSelect: function (oEvent) {
@@ -62,49 +63,65 @@ sap.ui.define([
 			var row = new sap.m.ColumnListItem(sId, {
 				type: "Active",
 				cells: [
-					new sap.m.Text({
-						text: data.getProperty(sPath + "/" + columns[0].columnKey)
+					new sap.m.Input({
+						value: data.getProperty(sPath + "/" + columns[0].columnKey),
+						editable: false
+
 					}),
-					new sap.m.Text({
-						text: data.getProperty(sPath + "/" + columns[1].columnKey)
+					new sap.m.Input({
+						value: data.getProperty(sPath + "/" + columns[1].columnKey),
+						editable: false
 					}),
-					new sap.m.Text({
-						text: data.getProperty(sPath + "/" + columns[2].columnKey)
+					new sap.m.Input({
+						value: data.getProperty(sPath + "/" + columns[2].columnKey),
+						editable: false
+
 					}),
-					new sap.m.Text({
-						text: data.getProperty(sPath + "/" + columns[3].columnKey)
+					new sap.m.Input({
+						value: data.getProperty(sPath + "/" + columns[3].columnKey),
+						editable: false
+
 					}),
-					new sap.m.Text({
-						text: data.getProperty(sPath + "/" + columns[4].columnKey)
+					new sap.m.Input({
+						value: data.getProperty(sPath + "/" + columns[4].columnKey),
+						editable: false
 					}),
-					new sap.m.Text({
-						text: data.getProperty(sPath + "/" + columns[5].columnKey)
+					new sap.m.Input({
+						value: data.getProperty(sPath + "/" + columns[5].columnKey),
+						editable: false
 					}),
-					new sap.m.Text({
-						text: data.getProperty(sPath + "/" + columns[6].columnKey)
+					new sap.m.Input({
+						value: data.getProperty(sPath + "/" + columns[6].columnKey),
+						editable: false
 					}),
-					new sap.m.Text({
-						text: data.getProperty(sPath + "/" + columns[7].columnKey)
+					new sap.m.Input({
+						value: data.getProperty(sPath + "/" + columns[7].columnKey),
+						editable: false
 					}),
-					new sap.m.Text({
-						text: data.getProperty(sPath + "/" + columns[8].columnKey)
+					new sap.m.Input({
+						value: data.getProperty(sPath + "/" + columns[8].columnKey),
+						editable: false
 					}),
-					new sap.m.Text({
-						text: data.getProperty(sPath + "/" + columns[9].columnKey)
+					new sap.m.Input({
+						value: data.getProperty(sPath + "/" + columns[9].columnKey),
+						editable: false
 					}),
-					new sap.m.Text({
-						text: data.getProperty(sPath + "/" + columns[10].columnKey)
+					new sap.m.Input({
+						value: data.getProperty(sPath + "/" + columns[10].columnKey),
+						editable: false
 					}),
-					new sap.m.Text({
-						text: data.getProperty(sPath + "/" + columns[11].columnKey)
+					new sap.m.Input({
+						value: data.getProperty(sPath + "/" + columns[11].columnKey),
+						editable: false
 					}),
-					new sap.m.Text({
-						text: data.getProperty(sPath + "/" + columns[12].columnKey)
+					new sap.m.Input({
+						value: data.getProperty(sPath + "/" + columns[12].columnKey),
+						editable: false
 					}),
 					new sap.m.Button({
 						icon: "sap-icon://edit",
-						press: function () {
-							that.onPressEdit(sPath);
+						press: function (oEvent) {
+							that.onPressEdit(oEvent);
 						}
 					})
 
@@ -112,35 +129,6 @@ sap.ui.define([
 			});
 
 			return row;
-		},
-		onPressGroupAndConfirm: function (oEvent) {
-			var oTable = this.getView().byId("idRequestsTable");
-			var idx = oTable.indexOfItem(oTable.getSelectedItem());
-			if (idx !== -1) {
-				var oItems = oTable.getSelectedItems();
-				var oSelectedItems = [];
-				for (var i = 0; i < oItems.length; i++) {
-					oSelectedItems.push(oItems[i].getBindingContext("oTableModel").getObject());
-				}
-				if (oSelectedItems.length >= 2) {
-					// var oGroupModel = new sap.ui.model.json.JSONModel();
-					// this.getView().setModel(oGroupModel, "oGroupModel");
-					this.getView().getModel("oTableModel").setProperty("/oSelectedItems", $.extend(true, [], oSelectedItems));
-					var aColumnList = this.getView().getModel("ColModel").getProperty("/ColumnCollection");
-					this.getView().getModel("ColModel").setProperty("/ColumnCollection", aColumnList);
-					if (!this._oDialog) {
-						//this._oDialog = sap.ui.xmlfragment("com.demo.odata.Demo_Odata_Service.fragment.addItem", this);
-						this._oDialog = sap.ui.xmlfragment("idGroupandConfirm", "inc.lch.FUS.FreightUnits_Supplier.fragments.groupandconfirm", this);
-					}
-					this.getView().addDependent(this._oDialog);
-					this._oDialog.open();
-				} else {
-					sap.m.MessageBox.alert("Please Select atleast 2 Items");
-				}
-			} else {
-				sap.m.MessageBox.alert("Please Select the Items");
-			}
-
 		},
 
 		ChangeOrder: function () {
@@ -384,7 +372,6 @@ sap.ui.define([
 					}
 				}]
 			});
-			console.log(oExport);
 			oExport.saveFile().catch(function (oError) {
 
 			}).then(function () {
@@ -396,34 +383,13 @@ sap.ui.define([
 
 			this._oDialog = sap.ui.xmlfragment("idAddItemFrag", "inc.lch.FUS.FreightUnits_Supplier.fragments.addnew", this);
 
-			// var oModel = this.getView().getModel("oTableModel");
-			// var data = this.getView().getModel("oTableModel").getProperty("/ProductCollection");
-			//console.log(oDataGlobalModel);
-			// var lastId = data[data.length - 1].ProductId + 1;
-			// oModel.setProperty("/edit", {
-			// 	"ProductId": lastId,
-			// 	"Name": ""
-			// });
-
-			//Fragment.byId("idEditItemFrag", "idProdId").setVisible(false);
-
 			this.getView().addDependent(this._oDialog);
 			this._oDialog.open();
 		},
 		onSaveAdd: function (oEvent) {
 			var that = this;
-			//var oModel = that.getView().getModel("oTableModel");
-			// var oTable = that.getView().byId("idGroupTable");
-			// var oData = oTable.getBinding("items").getModel("oTableModel");
-			// this.getView().getModel("oGroupModel").setProperty("/ProductCollection").push({
-			// 	Name: ''
-			// });
-			//newArray.ProductCollection.push({Name : '', size : ''});
-			//this.oModel.refresh();
-			// var oGroupModel = new sap.ui.model.json.JSONModel();
-			// this.getView().setModel(oGroupModel, "oGroupModel");
 			var oProduct = sap.ui.core.Fragment.byId("idAddItemFrag", "idProdId").getValue();
-			var oName = sap.ui.core.Fragment.byId("idAddItemFrag" ,"idName").getValue();
+			var oName = sap.ui.core.Fragment.byId("idAddItemFrag", "idName").getValue();
 			var oModel = this.getView().getModel("oTableModel");
 			var oData = {
 				ProductId: oProduct,
@@ -432,41 +398,73 @@ sap.ui.define([
 			var oModelData = oModel.getProperty("/oSelectedItems");
 			oModelData.push(oData);
 			oModel.setProperty("/oSelectedItems", oModelData);
-			
+
 			this._oDialog.close();
 			this._oDialog.destroy();
 			this._oDialog = null;
 		},
-		onPressEdit: function (path) {
-			this.bFlag = false;
-			var model = this.getView().getModel("oTableModel");
-			var obj = model.getProperty(path);
+		onPressEdit: function (oEvent) {
+			debugger;
+			var that = this;
+			var oItem = oEvent.getSource().getParent();
+			var oTable = that.getView().byId("idRequestsTable");
+			var oModel = this.getView().getModel("oViewModel");
+			var oIndex = oTable.indexOfItem(oItem);
 
-			var id = obj.ProductId;
-			var name = obj.Name;
-			var price = obj.Price;
-			// var rating = obj.Rating;
-			// var release = obj.ReleaseDate;
+			var oFlag = oModel.getProperty("/oIndex");
+			if (oFlag === undefined) {
+				oModel.setProperty("/oIndex", oIndex);
+				this.onPress(oItem, true);
+			} else {
+				var oPreviousItem = oTable.getItems()[oFlag];
+				this.onPress(oPreviousItem, false);
+				var oCurrentItem = oTable.getItems()[oIndex];
+				oModel.setProperty("/oIndex", oIndex);
+				this.onPress(oCurrentItem, true);
+			}
+			/// this.bFlag = false;
+			// var model = this.getView().getModel("oTableModel");
+			// var obj = model.getProperty(path);
 
-			var edit = {
-				"ProductId": id,
-				"Name": name,
-				"Price": price,
-				// "Rating": rating,
-				// "ReleaseDate": release,
-				"sPath": path
+			// var id = obj.ProductId;
+			// var name = obj.Name;
+			// var price = obj.Price;
+			// // var rating = obj.Rating;
+			// // var release = obj.ReleaseDate;
 
-			};
+			// var edit = {
+			// 	"ProductId": id,
+			// 	"Name": name,
+			// 	"Price": price,
+			// 	// "Rating": rating,
+			// 	// "ReleaseDate": release,
+			// 	"sPath": path
 
-			var oModel = new JSONModel();
-			this.getView().setModel(oModel, "oViewModel");
-			oModel.setProperty("/edit", edit);
-			this.selectedBackUp = $.extend(true, {}, oModel.getData()["/ProductCollection"]);
+			// };
 
-			this._oDialog = sap.ui.xmlfragment("idEditItemFrag", "inc.lch.FUS.FreightUnits_Supplier.fragments.edit", this);
+			// var oModel = new JSONModel();
+			// this.getView().setModel(oModel, "oViewModel");
+			// oModel.setProperty("/edit", edit);
+			// this.selectedBackUp = $.extend(true, {}, oModel.getData()["/ProductCollection"]);
 
-			this.getView().addDependent(this._oDialog);
-			this._oDialog.open();
+			// this._oDialog = sap.ui.xmlfragment("idEditItemFrag", "inc.lch.FUS.FreightUnits_Supplier.fragments.edit", this);
+
+			// this.getView().addDependent(this._oDialog);
+			// this._oDialog.open();
+		},
+		onPress: function (oItem, oFlag) {
+			// debugger;
+			var oColModel= this.getView().getModel("ColModel").getProperty("/ColumnCollection");
+			var oEditableCollection = this.getView().getModel("oViewModel").getProperty("/EditableCollection");
+			var oEditableCells = oItem.getCells();
+			$(oEditableCells).each(function (i) {
+				var oEditableCell = oEditableCells[i];
+				var oMetaData = oEditableCell.getMetadata();
+				var oElement = oMetaData.getElementName();
+				if (oElement == "sap.m.Input") {
+					oEditableCell.setEditable(oEditableCollection[oColModel[i].columnKey]);
+				}
+			});
 		},
 		onSave: function () {
 			if (this.bFlag === false) {
@@ -513,14 +511,93 @@ sap.ui.define([
 
 							var oData = that.getView().getModel("oTableModel").getProperty("/DraftsCollection");
 							oData.splice(iIndex, 1); //Use splice to remove your object in the array
-							that.getView().getModel("oTableModel").setProperty("/DraftsCollection",oData); //And set the new data to the model
+							that.getView().getModel("oTableModel").setProperty("/DraftsCollection", oData); //And set the new data to the model
 
-					}
+						}
 					}
 				}
 			});
 		},
+		onPressGroupAndConfirm: function (oEvent) {
 
+			var that = this;
+			var oTable = this.getView().byId("idRequestsTable");
+			var idx = oTable.indexOfItem(oTable.getSelectedItem());
+			if (idx !== -1) {
+				var oItems = oTable.getSelectedItems();
+				var oSelectedItems = [];
+				for (var i = 0; i < oItems.length; i++) {
+					oSelectedItems.push(oItems[i].getBindingContext("oTableModel").getObject());
+				}
+				if (oSelectedItems.length >= 2) {
+					// var oGroupModel = new sap.ui.model.json.JSONModel();
+					// this.getView().setModel(oGroupModel, "oGroupModel");
+					this.getView().getModel("oTableModel").setProperty("/oSelectedItems", $.extend(true, [], oSelectedItems));
+					var aColumnList = this.getView().getModel("ColModel").getProperty("/ColumnCollection");
+					this.getView().getModel("ColModel").setProperty("/ColumnCollection", aColumnList);
+					if (!that._oDialog) {
+						that._oDialog = sap.ui.xmlfragment("idGroupandConfirm", "inc.lch.FUS.FreightUnits_Supplier.fragments.groupandconfirm", this);
+					}
+					that.getView().addDependent(this._oDialog);
+					that._oDialog.open();
+				} else {
+					sap.m.MessageBox.alert("Please Select atleast 2 Items");
+				}
+			} else {
+				sap.m.MessageBox.alert("Please Select the Items");
+			}
+
+		},
+		onGroupConfirm: function (oEvent) {
+			debugger;
+			var that = this;
+			//for (var i = aSelectedpath.length - 1; i >= 0; i--) { //start with highest index first 
+
+			//	var aPathPart = aSelectedpath[i].split("/");
+			//	var iIndex = aPathPart[aPathPart.length - 1]; //Index to delete into our array of objects
+
+			var oGroupData = this.getView().getModel("oTableModel").getProperty("/oSelectedItems");
+			this.getView().getModel("oTableModel").getProperty("/ResponseCollection");
+			var sLength = oGroupData.length;
+			for (var i = 0; i < sLength; i++) {
+				this.aResponse.push(this.getView().getModel("oTableModel").getProperty("/oSelectedItems/" + i));
+			}
+			//var aSelectedpath = oEvent.getSource().getParent().getParent().getParent().getSelectedContextPaths();
+			// oJSON.splice(iIndex, 1); //Use splice to remove your object in the array
+			// this.getView().getModel("oTableModel").setProperty("/oSelectedItems", oJSON); //And set the new data to the model
+
+			//}
+			//this.getView().getModel("oTableModel").setProperty("/oSelectedItems", oGroupData);
+			this.getView().getModel("oTableModel").setProperty("/ResponseCollection", this.aResponse);
+			//this.getView().getModel("oTableModel").refresh(true);
+			//oEvent.getSource().getParent().getParent().removeSelections(true);
+			//sap.m.MessageBox.success("Order Placed");
+			that._oDialog.close();
+			that._oDialog.destroy();
+			that._oDialog = null;
+
+			sap.m.MessageBox.success("Order Placed");
+		},
+		onConfirmOrder: function (oEvent) {
+			var aSelectedpath = oEvent.getSource().getParent().getParent().getSelectedContextPaths();
+			/*var items = contexts.map(function (c) {
+			  return c.getObject();
+			});*/
+
+			for (var i = aSelectedpath.length - 1; i >= 0; i--) { //start with highest index first 
+
+				var aPathPart = aSelectedpath[i].split("/");
+				var iIndex = aPathPart[aPathPart.length - 1]; //Index to delete into our array of objects
+
+				var oJSON = this.getView().getModel("oTableModel").getProperty("/ProductCollection");
+				this.aResponse.push(this.getView().getModel("oTableModel").getProperty("/ProductCollection/" + iIndex));
+				oJSON.splice(iIndex, 1); //Use splice to remove your object in the array
+				this.getView().getModel("oTableModel").setProperty("/ProductCollection", oJSON); //And set the new data to the model
+
+			}
+			this.getView().getModel("oTableModel").setProperty("/ResponseCollection", this.aResponse);
+			oEvent.getSource().getParent().getParent().removeSelections(true);
+		},
 		fnSaveDraft: function (oEvent) {
 			var aSelectedpaths = oEvent.getSource().getParent().getParent().getSelectedContextPaths();
 			/*var items = contexts.map(function (c) {
@@ -540,6 +617,32 @@ sap.ui.define([
 			}
 			this.getView().getModel("oTableModel").setProperty("/DraftsCollection", this.aDrafts);
 			oEvent.getSource().getParent().getParent().removeSelections(true);
+		},
+		onUploadFile: function () {
+
+			this._oDialog = sap.ui.xmlfragment("idUploadFrag", "inc.lch.FUS.FreightUnits_Supplier.fragments.upload", this);
+
+			this.getView().addDependent(this._oDialog);
+			this._oDialog.open();
+
+		},
+		// 						onUpload: function (e) {
+
+		// 							var t = this;
+		// 							var fU = this.getView().byId("idfileUploader");
+		// 							var domRef = fU.getFocusDomRef();
+		// 							var file = domRef.files[0];
+		// 							var dublicateValue = [];
+		// 							try {
+		// 								if (file) {
+		// 									var that = this;
+		// 									that._oBusyDialog.open();
+		// }}},
+		onCancelBtn: function (oEvent) {
+			this._oDialog.close();
+			this._oDialog.destroy();
+			this._oDialog = null;
+
 		},
 		fnselecteditems: function () {
 

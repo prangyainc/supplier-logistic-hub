@@ -1,0 +1,18 @@
+{
+	"EditableCollection": {
+		"ProductId": true,
+		"Name": true,
+		"SupplierName": false,
+		"Category": true,
+		"Quantity": true,
+		"Price": true,
+		"MainCategory": false,
+		"TaxTarifCode" : true,
+		"WeightMeasure": false,
+		"Description": true,
+		"DateOfSale": true,
+		"Status": false,
+		"UoM": true
+		
+	}
+}

@@ -3,7 +3,7 @@
 	<Dialog title="Group and confirm" titleAlignment="Center" closeOnNavigation="true" draggable="true" contentWidth="90rem" resizable="true"
 		class="sapUiSizeCompact" verticalScrolling="true">
 		<Toolbar>
-			<CheckBox text="Apply All"/>
+			<!--<CheckBox text="Apply All"/>-->
 			<ToolbarSpacer/>
 			<Button text="Add New" press="onPressAddNew" type="Emphasized" icon="sap-icon://add-product"/>
 		</Toolbar>
@@ -25,10 +25,10 @@
 			
 		</Table>
 		<beginButton>
-			<Button text="Save as Draft" press="onSave"/>
+			<Button text="Save as Draft" press="fnSaveDraft"/>
 		</beginButton>
 		<endButton>
-			<Button text="Confirm" type="Accept" press="onConfirm"/>
+			<Button text="Confirm" type="Accept" press="onGroupConfirm"/>
 		</endButton>
 	</Dialog>
 </core:FragmentDefinition>
