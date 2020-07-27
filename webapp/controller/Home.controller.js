@@ -404,7 +404,7 @@ sap.ui.define([
 			this._oDialog = null;
 		},
 		onPressEdit: function (oEvent) {
-			debugger;
+
 			var that = this;
 			var oItem = oEvent.getSource().getParent();
 			var oTable = that.getView().byId("idRequestsTable");
@@ -454,7 +454,7 @@ sap.ui.define([
 		},
 		onPress: function (oItem, oFlag) {
 			// debugger;
-			var oColModel= this.getView().getModel("ColModel").getProperty("/ColumnCollection");
+			var oColModel = this.getView().getModel("ColModel").getProperty("/ColumnCollection");
 			var oEditableCollection = this.getView().getModel("oViewModel").getProperty("/EditableCollection");
 			var oEditableCells = oItem.getCells();
 			$(oEditableCells).each(function (i) {
@@ -466,31 +466,31 @@ sap.ui.define([
 				}
 			});
 		},
-		onSave: function () {
-			if (this.bFlag === false) {
-				var oModel = this.getView().getModel("oViewModel");
-				var oTableModel = this.getView().getModel("oTableModel");
-				var oEdit = $.extend(true, {}, oModel.getProperty("/edit"));
-				var sPath = oEdit.sPath;
-				oTableModel.setProperty(sPath, oEdit);
-			}
+		// onSave: function () {
+		// 	if (this.bFlag === false) {
+		// 		var oModel = this.getView().getModel("oViewModel");
+		// 		var oTableModel = this.getView().getModel("oTableModel");
+		// 		var oEdit = $.extend(true, {}, oModel.getProperty("/edit"));
+		// 		var sPath = oEdit.sPath;
+		// 		oTableModel.setProperty(sPath, oEdit);
+		// 	}
 
-			this._oDialog.close();
-			this._oDialog.destroy();
-			this._oDialog = null;
+		// 	this._oDialog.close();
+		// 	this._oDialog.destroy();
+		// 	this._oDialog = null;
 
-		},
+		// },
 		onCancel: function (sPath) {
 			var that = this;
 
 			this._oDialog.close();
 			this._oDialog.destroy();
 			this._oDialog = null;
-			that.populateItems();
-			if (this.bFlag === false) {
-				var oModel = this.getView().getModel("oTableModel");
-				oModel.setProperty("/ProductCollection", this.selectedBackUp);
-			}
+			// that.populateItems();
+			// if (this.bFlag === false) {
+			// 	var oModel = this.getView().getModel("oTableModel");
+			// 	oModel.setProperty("/ProductCollection", this.selectedBackUp);
+			// }
 		},
 		fnDelete: function (oEvent) {
 			var that = this;
@@ -535,11 +535,11 @@ sap.ui.define([
 					this.getView().getModel("oTableModel").setProperty("/oSelectedItems", $.extend(true, [], oSelectedItems));
 					var aColumnList = this.getView().getModel("ColModel").getProperty("/ColumnCollection");
 					this.getView().getModel("ColModel").setProperty("/ColumnCollection", aColumnList);
-					if (!that._oDialog) {
-						that._oDialog = sap.ui.xmlfragment("idGroupandConfirm", "inc.lch.FUS.FreightUnits_Supplier.fragments.groupandconfirm", this);
+					if (!this._oDialog) {
+						this._oDialog = sap.ui.xmlfragment("idGroupandConfirm", "inc.lch.FUS.FreightUnits_Supplier.fragments.groupandconfirm", this);
 					}
-					that.getView().addDependent(this._oDialog);
-					that._oDialog.open();
+					this.getView().addDependent(this._oDialog);
+					this._oDialog.open();
 				} else {
 					sap.m.MessageBox.alert("Please Select atleast 2 Items");
 				}
@@ -551,10 +551,6 @@ sap.ui.define([
 		onGroupConfirm: function (oEvent) {
 			debugger;
 			var that = this;
-			//for (var i = aSelectedpath.length - 1; i >= 0; i--) { //start with highest index first 
-
-			//	var aPathPart = aSelectedpath[i].split("/");
-			//	var iIndex = aPathPart[aPathPart.length - 1]; //Index to delete into our array of objects
 
 			var oGroupData = this.getView().getModel("oTableModel").getProperty("/oSelectedItems");
 			this.getView().getModel("oTableModel").getProperty("/ResponseCollection");
@@ -562,28 +558,27 @@ sap.ui.define([
 			for (var i = 0; i < sLength; i++) {
 				this.aResponse.push(this.getView().getModel("oTableModel").getProperty("/oSelectedItems/" + i));
 			}
-			//var aSelectedpath = oEvent.getSource().getParent().getParent().getParent().getSelectedContextPaths();
-			// oJSON.splice(iIndex, 1); //Use splice to remove your object in the array
-			// this.getView().getModel("oTableModel").setProperty("/oSelectedItems", oJSON); //And set the new data to the model
-
-			//}
-			//this.getView().getModel("oTableModel").setProperty("/oSelectedItems", oGroupData);
 			this.getView().getModel("oTableModel").setProperty("/ResponseCollection", this.aResponse);
-			//this.getView().getModel("oTableModel").refresh(true);
-			//oEvent.getSource().getParent().getParent().removeSelections(true);
-			//sap.m.MessageBox.success("Order Placed");
-			that._oDialog.close();
-			that._oDialog.destroy();
-			that._oDialog = null;
+			oEvent.getSource().getParent().close();
+			oEvent.getSource().getParent().destroy();
 
 			sap.m.MessageBox.success("Order Placed");
 		},
+		onGroupDraft: function (oEvent) {
+			var that = this;
+			var oGroupData = this.getView().getModel("oTableModel").getProperty("/oSelectedItems");
+			this.getView().getModel("oTableModel").getProperty("/DraftsCollection");
+			var sLength = oGroupData.length;
+			for (var i = 0; i < sLength; i++) {
+				this.aResponse.push(this.getView().getModel("oTableModel").getProperty("/oSelectedItems/" + i));
+			}
+			this.getView().getModel("oTableModel").setProperty("/DraftsCollection", this.aResponse);
+			oEvent.getSource().getParent().close();
+			oEvent.getSource().getParent().destroy();
+			sap.m.MessageBox.success("Order saved in drafts");
+		},
 		onConfirmOrder: function (oEvent) {
 			var aSelectedpath = oEvent.getSource().getParent().getParent().getSelectedContextPaths();
-			/*var items = contexts.map(function (c) {
-			  return c.getObject();
-			});*/
-
 			for (var i = aSelectedpath.length - 1; i >= 0; i--) { //start with highest index first 
 
 				var aPathPart = aSelectedpath[i].split("/");
@@ -638,6 +633,63 @@ sap.ui.define([
 		// 									var that = this;
 		// 									that._oBusyDialog.open();
 		// }}},
+		getCSRFToken: function (url, token) {
+			var token = null;
+			var sUrl = url;
+			$.ajax({
+				url: sUrl,
+				type: "GET",
+				async: false,
+				beforeSend: function (xhr) {
+					xhr.setRequestHeader("X-CSRF-Token", "Fetch");
+				},
+				complete: function (xhr) {
+					token = xhr.getResponseHeader("X-CSRF-Token");
+				}
+			});
+			return token;
+		},
+		onSubmitFile: function () {
+			var that = this;
+			var sUrl99 = "/FU_Supplier/import";
+
+			var AddData = {
+				"supplierId": "SUP1001",
+				"freightUnitId": "FUN1020",
+				"userId": "MP2045",
+				"originId": null,
+				"destinationId": "DEST3105",
+				"shipDate": "2020-07-03 06:00:00.0",
+				"quantity": 50,
+				"newQuantity": 0,
+				"newShipDate": null,
+				"remainingShipDate": null,
+				"countryOfOrigin": null,
+				"groupId": null,
+				"status": "REQUEST",
+				"partDescription": "CLUTC-DRIVE FAN, PX8",
+				"purschaseOrderNumber": null
+
+			}
+			$.ajax({
+				url: sUrl99,
+				type: "POST",
+				async: false,
+				data: JSON.stringify(AddData),
+				contentType: "application/json",
+				beforeSend: function (xhr) {
+					var param = "/service";
+					var token = that.getCSRFToken(sUrl99, param);
+					xhr.setRequestHeader("X-CSRF-Token", token);
+					xhr.setRequestHeader("Accept", "application/json");
+				},
+				success: function (data) {
+					console.log(data);
+					sap.m.MessageToast.show(data.message);
+				}
+			});
+
+		},
 		onCancelBtn: function (oEvent) {
 			this._oDialog.close();
 			this._oDialog.destroy();
