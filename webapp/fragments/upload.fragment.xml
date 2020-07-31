@@ -6,7 +6,7 @@
 			<u:FileUploader id="idfileUploader" width="100%" sameFilenameAllowed="false" placeholder="Choose a CSV file" style="Emphasized"></u:FileUploader>
 		</VBox>
 		<beginButton>
-			<Button text="Upload" press="onUpload"></Button>
+			<Button text="Upload" press="onSubmitFile"></Button>
 		</beginButton>
 		<endButton><Button text="Cancel" press="onCancelBtn" type="Reject"/></endButton>
 	</Dialog>

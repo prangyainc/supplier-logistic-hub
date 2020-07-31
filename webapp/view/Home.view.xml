@@ -85,8 +85,8 @@
 									<Button press="onPressGroupAndConfirm" text="group and confirm"></Button>
 									<Button text="Filters"/>
 									<Button text="Preference" press="ChangeOrder"/>
-									<Button text="Save as Draft" press="fnSaveDraft"/>
-									<Button text="download file" press="onDownload"/>
+									<Button text="Save as Draft" press="fnSaveDraft" />
+									<Button text="download file" press="onDownload" />
 									<Button text="upload file" press="onUploadFile"/>
 									
 								</OverflowToolbar>

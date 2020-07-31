@@ -5,7 +5,7 @@
 		<Toolbar>
 			<!--<CheckBox text="Apply All"/>-->
 			<ToolbarSpacer/>
-			<Button text="Add New" press="onPressAddNew" type="Emphasized" icon="sap-icon://add-product"/>
+			<Button press="onPressAddNew" type="Emphasized" icon="sap-icon://add-product"/>
 		</Toolbar>
 		<Table id="idGroupTable" columns="{path: 'ColModel>/ColumnCollection'}"
 			items="{path: 'oTableModel>/oSelectedItems', factory: '.populateItems'}">

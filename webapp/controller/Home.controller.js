@@ -377,31 +377,54 @@ sap.ui.define([
 			}).then(function () {
 				oExport.destroy();
 			});
+			sap.m.MessageBox.success("File saved");
 		},
 		onPressAddNew: function () {
 			this.bFlag = true;
 
 			this._oDialog = sap.ui.xmlfragment("idAddItemFrag", "inc.lch.FUS.FreightUnits_Supplier.fragments.addnew", this);
+			// var openAssetTable = this.getView().byId("idGroupTable"),
+			// 	columnHeader = openAssetTable.getColumns();
 
 			this.getView().addDependent(this._oDialog);
 			this._oDialog.open();
 		},
 		onSaveAdd: function (oEvent) {
+			debugger;
 			var that = this;
-			var oProduct = sap.ui.core.Fragment.byId("idAddItemFrag", "idProdId").getValue();
-			var oName = sap.ui.core.Fragment.byId("idAddItemFrag", "idName").getValue();
+			var oTable = sap.ui.core.Fragment.byId("idAddItemFrag","idAddTable");
+			var idx = oTable.indexOfItem(oTable.getSelectedItem());
 			var oModel = this.getView().getModel("oTableModel");
-			var oData = {
-				ProductId: oProduct,
-				Name: oName
-			};
-			var oModelData = oModel.getProperty("/oSelectedItems");
-			oModelData.push(oData);
-			oModel.setProperty("/oSelectedItems", oModelData);
+			if (idx !== -1) {
+				var oItems = oTable.getSelectedItems();
+				var oData = [];
+				var oModelData = oModel.getProperty("/oSelectedItems");
+				//var sLength = oModelData.length;
+				for (var i = 0; i < oItems.length; i++) {
+					 oModelData.push($.extend(true , {} ,oItems[i].getBindingContext("oTableModel").getProperty("/oSelectedItems/" + i)));
+					//oData.push(oItems[i].getBindingContext("oTableModel").getProperty("/oSelectedItems/" + i));
+			        oModelData.push(oData);
+			        oModel.setProperty("/oSelectedItems", oModelData);
+					
+					// var aColumnList = this.getView().getModel("ColModel").getProperty("/ColumnCollection");
+					// this.getView().getModel("ColModel").setProperty("/ColumnCollection", aColumnList);
+			}
+			// var that = this;
+			// var oProduct = sap.ui.core.Fragment.byId("idAddItemFrag", "idProdId").getValue();
+			// var oName = sap.ui.core.Fragment.byId("idAddItemFrag", "idName").getValue();
+			// var oModel = this.getView().getModel("oTableModel");
+			// var oData = {
+			// 	ProductId: oProduct,
+			// 	Name: oName
+			// };
+			// var oModelData = oModel.getProperty("/oSelectedItems");
+			// oModelData.push(oData);
+			// oModel.setProperty("/oSelectedItems", oModelData);
 
 			this._oDialog.close();
 			this._oDialog.destroy();
 			this._oDialog = null;
+		}
 		},
 		onPressEdit: function (oEvent) {
 
@@ -494,29 +517,40 @@ sap.ui.define([
 		},
 		fnDelete: function (oEvent) {
 			var that = this;
-			sap.m.MessageBox.warning("Are you sure?", {
-				actions: [sap.m.MessageBox.Action.OK, sap.m.MessageBox.Action.CANCEL],
-				emphasizedAction: [sap.m.MessageBox.Action.CANCEL],
-				onClose: function (sAction) {
-					//MessageToast.show("Action selected: " + sAction);
-					var action = sAction;
-					if (action === "OK") {
-						var oTable = that.getView().byId("idDraftsTable");
-						var aSelectedItems = oTable.getSelectedItems();
+			var oTable = this.getView().byId("idDraftsTable");
+			var idx = oTable.indexOfItem(oTable.getSelectedItem());
+			if (idx !== -1) {
+				sap.m.MessageBox.warning("Are you sure?", {
+						actions: [sap.m.MessageBox.Action.OK, sap.m.MessageBox.Action.CANCEL],
+						emphasizedAction: [sap.m.MessageBox.Action.CANCEL],
+						onClose: function (sAction) {
+							//MessageToast.show("Action selected: " + sAction);
+							var action = sAction;
+							if (action === "OK") {
+								var oTable = that.getView().byId("idDraftsTable");
+								var aSelectedItems = oTable.getSelectedItems();
 
-						for (var i = aSelectedItems.length - 1; i >= 0; i--) { //start with highest index first 
-							var oItemContextPath = aSelectedItems[i].getBindingContext("oTableModel").getPath();
-							var aPathParts = oItemContextPath.split("/");
-							var iIndex = aPathParts[aPathParts.length - 1]; //Index to delete into our array of objects
+								for (var i = aSelectedItems.length - 1; i >= 0; i--) { //start with highest index first 
+									var oItemContextPath = aSelectedItems[i].getBindingContext("oTableModel").getPath();
+									var aPathParts = oItemContextPath.split("/");
+									var iIndex = aPathParts[aPathParts.length - 1]; //Index to delete into our array of objects
 
-							var oData = that.getView().getModel("oTableModel").getProperty("/DraftsCollection");
-							oData.splice(iIndex, 1); //Use splice to remove your object in the array
-							that.getView().getModel("oTableModel").setProperty("/DraftsCollection", oData); //And set the new data to the model
+									var oData = that.getView().getModel("oTableModel").getProperty("/DraftsCollection");
+									oData.splice(iIndex, 1); //Use splice to remove your object in the array
+									that.getView().getModel("oTableModel").setProperty("/DraftsCollection", oData); //And set the new data to the model
+									sap.m.MessageBox.success("Draft deleted");
+								}
+							} else {
 
+								this.byId("idDraftsTable").clearSelection();
+
+							}
 						}
 					}
-				}
-			});
+
+				);
+
+			}
 		},
 		onPressGroupAndConfirm: function (oEvent) {
 
@@ -592,6 +626,7 @@ sap.ui.define([
 			}
 			this.getView().getModel("oTableModel").setProperty("/ResponseCollection", this.aResponse);
 			oEvent.getSource().getParent().getParent().removeSelections(true);
+			sap.m.MessageBox.success("Order placed");
 		},
 		fnSaveDraft: function (oEvent) {
 			var aSelectedpaths = oEvent.getSource().getParent().getParent().getSelectedContextPaths();
@@ -612,6 +647,7 @@ sap.ui.define([
 			}
 			this.getView().getModel("oTableModel").setProperty("/DraftsCollection", this.aDrafts);
 			oEvent.getSource().getParent().getParent().removeSelections(true);
+			sap.m.MessageBox.success("Order saved in drafts");
 		},
 		onUploadFile: function () {
 
@@ -649,34 +685,43 @@ sap.ui.define([
 			});
 			return token;
 		},
-		onSubmitFile: function () {
+		onSubmitFile: function (oEvent) {
 			var that = this;
 			var sUrl99 = "/FU_Supplier/import";
+			//var t = this;
+			
+			var fU = sap.ui.core.Fragment.byId("idUploadFrag", "idfileUploader");
+			var domRef = fU.getFocusDomRef();
+			var file = domRef.files[0];
+			var dublicateValue = [];
 
-			var AddData = {
-				"supplierId": "SUP1001",
-				"freightUnitId": "FUN1020",
-				"userId": "MP2045",
-				"originId": null,
-				"destinationId": "DEST3105",
-				"shipDate": "2020-07-03 06:00:00.0",
-				"quantity": 50,
-				"newQuantity": 0,
-				"newShipDate": null,
-				"remainingShipDate": null,
-				"countryOfOrigin": null,
-				"groupId": null,
-				"status": "REQUEST",
-				"partDescription": "CLUTC-DRIVE FAN, PX8",
-				"purschaseOrderNumber": null
+			// var AddData = {
+			// 	"supplierId": "SUP1001",
+			// 	"freightUnitId": "FUN1020",
+			// 	"userId": "MP2045",
+			// 	"originId": null,
+			// 	"destinationId": "DEST3105",
+			// 	"shipDate": "2020-07-03 06:00:00.0",
+			// 	"quantity": 50,
+			// 	"newQuantity": 0,
+			// 	"newShipDate": null,
+			// 	"remainingShipDate": null,
+			// 	"countryOfOrigin": null,
+			// 	"groupId": null,
+			// 	"status": "REQUEST",
+			// 	"partDescription": "CLUTC-DRIVE FAN, PX8",
+			// 	"purschaseOrderNumber": null
 
-			}
+			// }
 			$.ajax({
 				url: sUrl99,
+				contentType: ["xls"],
+				processData: false,
+				data: file,
 				type: "POST",
 				async: false,
-				data: JSON.stringify(AddData),
-				contentType: "application/json",
+				//data: JSON.stringify(AddData),
+				//contentType: "application/json",
 				beforeSend: function (xhr) {
 					var param = "/service";
 					var token = that.getCSRFToken(sUrl99, param);
